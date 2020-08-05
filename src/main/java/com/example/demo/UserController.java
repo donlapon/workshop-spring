@@ -15,6 +15,8 @@ public class UserController {
         List<UserResponse> users = new ArrayList<>();
         users.add(new UserResponse(1, "User 1"));
         users.add(new UserResponse(2, "User 2"));
+        System.out.println("Page: " + page);
+        System.out.println("Item per Page:" + itemPerPage);
 
         return users;
     }
