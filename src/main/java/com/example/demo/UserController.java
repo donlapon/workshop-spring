@@ -10,7 +10,8 @@ public class UserController {
 
     @GetMapping("/users")
     @ResponseBody
-    public List<UserResponse> getAllUser() {
+    public List<UserResponse> getAllUser(@RequestParam (required = false, defaultValue = "1") String page,
+                                         @RequestParam(required = false, defaultValue = "15") String itemPerPage) {
         List<UserResponse> users = new ArrayList<>();
         users.add(new UserResponse(1, "User 1"));
         users.add(new UserResponse(2, "User 2"));
@@ -24,7 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/test")
-    public String getUrlByParam(@RequestParam (required = true, defaultValue = "1") String page, @RequestParam(required = false, defaultValue = "15") String itemPerPage){
+    public String getUrlByParam(@RequestParam (required = false, defaultValue = "1") String page,
+                                @RequestParam(required = false, defaultValue = "15") String itemPerPage){
         return "Page: " + page + " Item per page: " + itemPerPage;
     }
 }
