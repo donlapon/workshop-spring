@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -13,29 +14,40 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/users")
-    public UserResponse createNewUser(@RequestBody NewUserReques request){
+    public UsersResponse createNewUser(@RequestBody NewUserRequest request){
         User user = new User();
         user.setName(request.getName());
         user.setAge(request.getAge());
         user = userRepository.save(user);
-        return new UserResponse(user.getId(), user.getName() + user.getAge());
+        return new UsersResponse(user.getId(), user.getName() + user.getAge());
     }
 
     @GetMapping("/users")
-    public PagingResponse getAllUser(@RequestParam (defaultValue = "1") int page,
+    public PagingResponse getAllUser(@RequestParam(defaultValue = "1") int page,
                                      @RequestParam(name = "item_per_page", defaultValue = "10") int itemPerPage) {
         PagingResponse pagingResponse = new PagingResponse(page, itemPerPage);
-        List<UserResponse> users = new ArrayList<>();
-        users.add(new UserResponse(1, "User 1"));
-        users.add(new UserResponse(2, "User 2"));
+        List<UsersResponse> usersResponseList = new ArrayList<>();
 
-        pagingResponse.setUserResponse(users);
+        Iterable<User> users = userRepository.findAll();
+        for (User user: users) {
+            usersResponseList.add(new UsersResponse(user.getId(), user.getName(), user.getAge()));
+        }
+
+        pagingResponse.setUsersResponse(usersResponseList);
         return pagingResponse;
     }
 
     @GetMapping("/users/{id}")
-    public UserResponse getUserById(@PathVariable int id){
-        return new UserResponse(id, "User "+id);
+    public UsersResponse getUserById(@PathVariable int id){
+
+        Optional<User> users = userRepository.findById(id);
+        return new UsersResponse(users.get().getId(), users.get().getName(), users.get().getAge());
+
+    }
+
+    @PostMapping ("/users1")
+    public String createNewUserWithFormData (NewUserRequest request){
+        return request.getName()+request.getAge();
     }
 
     @GetMapping("/test")
@@ -44,8 +56,4 @@ public class UserController {
         return "Page: " + page + " Item per page: " + itemPerPage;
     }
 
-//    @PostMapping("/users")
-//    public UserResponse createNewUser(@RequestBody NewUserReques request) {
-//        return new UserResponse(0, request.getName() + request.getAge());
-//    }
 }

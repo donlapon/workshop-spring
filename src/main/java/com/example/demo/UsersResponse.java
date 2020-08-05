@@ -1,12 +1,26 @@
 package com.example.demo;
 
-public class UserResponse {
+public class UsersResponse {
     private int id;
     private String name;
+    private int age;
 
-    public UserResponse(int id, String name) {
+    public UsersResponse(int id, String name) {
+        this(id, name, 0);
+    }
+
+    public UsersResponse(int id, String name, int age) {
         this.id = id;
         this.name = name;
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     //POJO (Plan old Java Object)

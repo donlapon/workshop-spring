@@ -1,6 +1,6 @@
 package com.example.demo;
 
-public class NewUserReques {
+public class NewUserRequest {
     private String name;
     private int age;
 
