@@ -1,17 +1,30 @@
 package com.example.demo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserController {
 
     @GetMapping("/users")
-    public UserResponse[] getAllUser() {
-        UserResponse[] userResponses = new UserResponse[2];
-        userResponses[0] = new UserResponse(1, "User 1");
-        userResponses[1] = new UserResponse(2, "User 2");
+    @ResponseBody
+    public List<UserResponse> getAllUser() {
+        List<UserResponse> users = new ArrayList<>();
+        users.add(new UserResponse(1, "User 1"));
+        users.add(new UserResponse(2, "User 2"));
 
-        return userResponses;
+        return users;
+    }
+
+    @GetMapping("/users/{id}")
+    public UserResponse getUserById(@PathVariable int id){
+        return new UserResponse(id, "User "+id);
+    }
+
+    @GetMapping("/test")
+    public String getUrlByParam(@RequestParam (required = true, defaultValue = "1") String page, @RequestParam(required = false, defaultValue = "15") String itemPerPage){
+        return "Page: " + page + " Item per page: " + itemPerPage;
     }
 }
