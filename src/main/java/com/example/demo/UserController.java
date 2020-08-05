@@ -9,16 +9,16 @@ import java.util.List;
 public class UserController {
 
     @GetMapping("/users")
-    @ResponseBody
-    public List<UserResponse> getAllUser(@RequestParam (required = false, defaultValue = "1") String page,
-                                         @RequestParam(required = false, defaultValue = "15") String itemPerPage) {
+    public PagingResponse getAllUser(@RequestParam (defaultValue = "1") int page,
+                                     @RequestParam(name = "item_per_page", defaultValue = "10") int itemPerPage) {
+        PagingResponse pagingResponse = new PagingResponse(page, itemPerPage);
         List<UserResponse> users = new ArrayList<>();
         users.add(new UserResponse(1, "User 1"));
         users.add(new UserResponse(2, "User 2"));
         System.out.println("Page: " + page);
         System.out.println("Item per Page:" + itemPerPage);
-
-        return users;
+        pagingResponse.setUserResponse(users);
+        return pagingResponse;
     }
 
     @GetMapping("/users/{id}")
@@ -30,5 +30,10 @@ public class UserController {
     public String getUrlByParam(@RequestParam (required = false, defaultValue = "1") String page,
                                 @RequestParam(required = false, defaultValue = "15") String itemPerPage){
         return "Page: " + page + " Item per page: " + itemPerPage;
+    }
+
+    @PostMapping("/users")
+    public UserResponse createNewUser(@RequestBody NewUserReques request) {
+        return new UserResponse(0, request.getName() + request.getAge());
     }
 }
