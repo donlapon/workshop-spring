@@ -1,14 +1,25 @@
 ## command
 
-- gradlew
+```
+gradlew
   
-- gradlew test
+gradlew test
   
-- set JAVA_HOME=<path ของ java>
-  
+set JAVA_HOME=<path ของ java>
+```
 
 ## Run spring
 
-- gradlew bootRun
+```
+gradlew bootRun
   
-- http://localhost:8080/
+http://localhost:8080/
+```
+
+Run prod.
+
+```
+gradlew clean bootJar
+
+java -jar <path.jar>
+```
